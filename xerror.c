@@ -1,7 +1,9 @@
-#include "../include/serror.h"
+#include <stdio.h>
 
+#include "xerror.h"
+#include "xsocklib.h"
 
-static void xerr_doit(int errnoflag, int level, const char *, va_list ap)
+void xerr_doit(int errnoflag, int level, const char *fmt, va_list ap)
 {
     int errno_save, n;
     char buf[MAXLINE + 1];
@@ -33,7 +35,7 @@ void xerr_ret(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    err_doit(1, LOG_INFO, fmt, ap);
+    xerr_doit(1, LOG_INFO, fmt, ap);
     va_end(ap);
 
     return;
@@ -43,7 +45,7 @@ void xerr_sys(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    err_doit(1, LOG_ERR, fmt, ap);
+    xerr_doit(1, LOG_ERR, fmt, ap);
     va_end(ap);
 
     exit(1);
@@ -53,7 +55,7 @@ void xerr_dump(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    err_doit(1, LOG_ERR, fmt, ap);
+    xerr_doit(1, LOG_ERR, fmt, ap);
     va_end(ap);
     abort();
     exit(1);
@@ -63,7 +65,7 @@ void xerr_msg(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    err_doit(0, LOG_INFO, fmt, ap);
+    xerr_doit(0, LOG_INFO, fmt, ap);
     va_end(ap);
     return;
 }
@@ -72,7 +74,7 @@ void xerr_quit(const char *fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
-    err_doit(0, LOG_ERR, fmt, ap);
+    xerr_doit(0, LOG_ERR, fmt, ap);
     va_end(ap);
     exit(1);
 }

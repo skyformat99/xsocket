@@ -6,7 +6,7 @@
 
 int deamon_proc;
 
-static void xerr_doit(int, int, const char *, va_list);
+void xerr_doit(int, int, const char *, va_list);
 void xerr_ret(const char *fmt, ...);
 void xerr_sys(const char *fmt, ...);
 void xerr_dump(const char *fmt, ...);

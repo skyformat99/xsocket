@@ -1,6 +1,6 @@
 #include "xsocklib.h"
 
-ssize_t xreadn(int fd, void *buff, size_t nbytes)
+ssize_t xreadn(int fd, void *buff, size_t n)
 {
     size_t nleft;
     ssize_t nread;
@@ -22,10 +22,10 @@ ssize_t xreadn(int fd, void *buff, size_t nbytes)
         ptr += nread;
     }
 
-    return n - left;
+    return n - nleft;
 }
 
-ssize_t xwriten(int fd, const void *buff, size_t nbytes)
+ssize_t xwriten(int fd, const void *buff, size_t n)
 {
     size_t nleft;
     ssize_t nwritten;
@@ -51,7 +51,7 @@ ssize_t xwriten(int fd, const void *buff, size_t nbytes)
     return n;
 }
 
-size_t xreadline(int fd, void *buff, size_t maxlen)
+ssize_t xreadline(int fd, void *buff, size_t maxlen)
 {
     ssize_t n, rc;
     char c, *ptr;
@@ -79,14 +79,14 @@ again:
     }
 
     *ptr = 0;
-    return n
+    return n;
 }
 
 
 int xsocket(int family, int type, int protocol)
 {
-    int sockfd
-    if ((sockfd = socket(family, type, protocol) == -1)) {
+    int sockfd;
+    if ((sockfd = socket(family, type, protocol) < 0)) {
         xerr_sys("socker error");
         return -1;
     }
@@ -105,7 +105,8 @@ int xconnect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen)
 
 int xbind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen)
 {
-    if (bind(sockfd, myaddr, ddrlen) < 0) {
+    int ret;
+    if ((ret = bind(sockfd, myaddr, addrlen)) == -1) {
         xerr_sys("bind error");
         return -1;
     }
@@ -143,12 +144,13 @@ int xaccept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen)
 
 pid_t xfork(void)
 {
-    if (fork() < 0) {
+    int pid;
+    if ((pid = fork()) < 0) {
         xerr_quit("fork error");
         return -1;
     }
 
-    return 0;
+    return pid;
 }
 
 

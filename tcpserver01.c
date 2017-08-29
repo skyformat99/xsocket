@@ -2,9 +2,6 @@
 #include "xsocklib.h"
 #include "xerror.h"
 
-#define SERV_PORT 8899
-#define LISTENQ 10
-#define MAXLINE 4096
 
 void str_echo(int sockfd);
 
@@ -15,7 +12,8 @@ int main(int argc, char **argv)
     socklen_t clilen;
     struct sockaddr_in cliaddr, servaddr;
 
-    listenfd = xsocket(AF_INET, SOCK_STREAM, 0);
+    listenfd = socket(AF_INET, SOCK_STREAM, 0);
+    printf("listenfd ===== %d", listenfd);
     bzero(&servaddr, sizeof(servaddr));
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
